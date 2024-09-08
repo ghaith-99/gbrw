@@ -1,0 +1,40 @@
+{
+  "channels": [
+    {
+      "name": "beIN Sport 1",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport1/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 2",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport2/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 3",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport3/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 4",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport4/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 5",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport5/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 6",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport6/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 7",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport7/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 8",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport8/tracks-v1a1/mono.m3u8"
+    },
+    {
+      "name": "beIN Sport 9",
+      "stream_url": "https://tv.rahmatele.com:4433/beIN_sport9/tracks-v1a1/mono.m3u8"
+    }
+  ]
+}
