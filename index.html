@@ -128,20 +128,27 @@
                         const hls = new Hls();
                         hls.loadSource(url);
                         hls.attachMedia(videoPlayer);
+                        hls.on(Hls.Events.ERROR, function (event, data) {
+                            if (data.fatal) {
+                                switch (data.fatal) {
+                                    case Hls.ErrorTypes.NETWORK_ERROR:
+                                        console.error('A network error occurred while trying to load the video.');
+                                        break;
+                                    case Hls.ErrorTypes.MEDIA_ERROR:
+                                        console.error('An error occurred while trying to play the video.');
+                                        break;
+                                    case Hls.ErrorTypes.OTHER_ERROR:
+                                        console.error('An unexpected error occurred.');
+                                        break;
+                                }
+                            }
+                        });
                     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
                         videoPlayer.src = url;
                     }
                     videoPlayerContainer.style.display = 'flex';
                     videoPlayer.play();
-
-                    // تفعيل وضع الشاشة الكاملة
-                    if (videoPlayer.requestFullscreen) {
-                        videoPlayer.requestFullscreen();
-                    } else if (videoPlayer.webkitRequestFullscreen) { // Safari
-                        videoPlayer.webkitRequestFullscreen();
-                    } else if (videoPlayer.msRequestFullscreen) { // IE/Edge
-                        videoPlayer.msRequestFullscreen();
-                    }
+                    videoPlayer.requestFullscreen(); // دخول وضع ملء الشاشة مباشرة
                 }
 
                 // إغلاق المشغل عند الضغط على زر الإغلاق
