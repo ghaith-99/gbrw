@@ -91,9 +91,6 @@
                 const videoPlayer = document.getElementById('video-player');
                 const closeButton = document.getElementById('close-button');
 
-                // تحقق من البيانات
-                console.log(data); // تحقق من البيانات المرسلة
-
                 // لكل قناة في البيانات، إنشاء عنصر HTML وعرضه
                 data.forEach(channel => {
                     const channelDiv = document.createElement('div');
@@ -132,19 +129,10 @@
                         hls.loadSource(url);
                         hls.attachMedia(videoPlayer);
 
+                        // مراقبة الأخطاء
                         hls.on(Hls.Events.ERROR, function (event, data) {
                             if (data.fatal) {
-                                switch (data.fatal) {
-                                    case Hls.ErrorTypes.NETWORK_ERROR:
-                                        console.error('حدث خطأ في الشبكة أثناء محاولة تحميل الفيديو للقناة: ' + url);
-                                        break;
-                                    case Hls.ErrorTypes.MEDIA_ERROR:
-                                        console.error('حدث خطأ أثناء محاولة تشغيل الفيديو للقناة: ' + url);
-                                        break;
-                                    case Hls.ErrorTypes.OTHER_ERROR:
-                                        console.error('حدث خطأ غير متوقع أثناء محاولة تشغيل الفيديو للقناة: ' + url);
-                                        break;
-                                }
+                                console.error('خطأ: ' + data.fatal + ' للقناة: ' + url);
                             }
                         });
                     } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
