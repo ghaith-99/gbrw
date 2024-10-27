@@ -131,17 +131,18 @@
                         const hls = new Hls();
                         hls.loadSource(url);
                         hls.attachMedia(videoPlayer);
+
                         hls.on(Hls.Events.ERROR, function (event, data) {
                             if (data.fatal) {
                                 switch (data.fatal) {
                                     case Hls.ErrorTypes.NETWORK_ERROR:
-                                        console.error('A network error occurred while trying to load the video.');
+                                        console.error('حدث خطأ في الشبكة أثناء محاولة تحميل الفيديو للقناة: ' + url);
                                         break;
                                     case Hls.ErrorTypes.MEDIA_ERROR:
-                                        console.error('An error occurred while trying to play the video.');
+                                        console.error('حدث خطأ أثناء محاولة تشغيل الفيديو للقناة: ' + url);
                                         break;
                                     case Hls.ErrorTypes.OTHER_ERROR:
-                                        console.error('An unexpected error occurred.');
+                                        console.error('حدث خطأ غير متوقع أثناء محاولة تشغيل الفيديو للقناة: ' + url);
                                         break;
                                 }
                             }
