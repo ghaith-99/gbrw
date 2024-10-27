@@ -83,14 +83,17 @@
 
     <script>
         // تحميل بيانات JSON وعرضها
-        fetch('https://raw.githubusercontent.com/ghaith-99/ghaith-99/refs/heads/main/mytv.json')
+        fetch('https://raw.githubusercontent.com/ghaith-99/ghaith-99/refs/heads/main/mytv.json?v=' + new Date().getTime())
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('channel-container');
                 const videoPlayerContainer = document.getElementById('video-player-container');
                 const videoPlayer = document.getElementById('video-player');
                 const closeButton = document.getElementById('close-button');
-                
+
+                // تحقق من البيانات
+                console.log(data); // تحقق من البيانات المرسلة
+
                 // لكل قناة في البيانات، إنشاء عنصر HTML وعرضه
                 data.forEach(channel => {
                     const channelDiv = document.createElement('div');
