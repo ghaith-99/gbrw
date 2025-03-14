@@ -1,37 +1,45 @@
-/* أنماط CSS لتنسيق الصفحة */
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-color: #f0f0f0;
-}
-
-h1 {
     text-align: center;
+    margin: 20px;
+    background-color: #f4f4f4;
 }
 
-#players-container {
-    margin-bottom: 20px;
+form {
+    background: white;
+    padding: 20px;
+    display: inline-block;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#add-player-form input {
+input, button {
     display: block;
-    margin: 10px 0;
+    margin: 10px auto;
     padding: 10px;
-    width: 300px; /* زيادة العرض لتسهيل إدخال البيانات */
+    width: 80%;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#players-list {
+    margin-top: 20px;
 }
 
 .player-card {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background: white;
     padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.player-image {
-    width: 100px;
+    margin: 10px auto;
     border-radius: 5px;
-    margin-top: 10px;
+    width: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
