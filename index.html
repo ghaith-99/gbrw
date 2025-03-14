@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة اللاعبين</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- قسم إضافة لاعب -->
+        <div class="form-section">
+            <h1>إضافة لاعب جديد</h1>
+            <input type="text" id="playerName" placeholder="اسم اللاعب">
+            <input type="number" id="playerAge" placeholder="العمر">
+            <input type="number" id="playerHeight" step="0.01" placeholder="الطول (متر)">
+            <input type="number" id="clubJersey" placeholder="رقم القميص (النادي)">
+            <input type="number" id="nationalJersey" placeholder="رقم القميص (المنتخب)">
+            
+            <div class="upload-group">
+                <label>صورة اللاعب: <input type="file" id="playerPhoto"></label>
+            </div>
+            
+            <button onclick="addPlayer()">إضافة لاعب</button>
+        </div>
+
+        <!-- قسم عرض اللاعبين -->
+        <div class="players-section">
+            <h2>قائمة اللاعبين</h2>
+            <div id="playersList"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
