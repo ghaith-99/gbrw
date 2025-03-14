@@ -3,35 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة اللاعبين</title>
+    <title>موقع الكرة القدم</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- قسم إضافة لاعب -->
-        <div class="form-section">
-            <h1>إضافة لاعب جديد</h1>
-            <input type="text" id="playerName" placeholder="اسم اللاعب">
-            <input type="number" id="playerAge" placeholder="العمر">
-            <input type="number" id="playerHeight" step="0.01" placeholder="الطول (متر)">
-            <input type="number" id="clubJersey" placeholder="رقم القميص (النادي)">
-            <input type="number" id="nationalJersey" placeholder="رقم القميص (المنتخب)">
-            
-            <div class="upload-group">
-                <label>صورة اللاعب: <input type="file" id="playerPhoto"></label>
-            </div>
-            
-            <button onclick="addPlayer()">إضافة لاعب</button>
-        </div>
+    <header>
+        <h1>موقع الكرة القدم</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">الصفحة الرئيسية</a></li>
+                <li><a href="#players">اللاعبون</a></li>
+                <li><a href="#clubs">الفرق</a></li>
+                <li><a href="#leagues">الлигиات</a></li>
+                <li><a href="#login">تسجيل الدخول</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <!-- قسم عرض اللاعبين -->
-        <div class="players-section">
-            <h2>قائمة اللاعبين</h2>
-            <div id="playersList"></div>
-        </div>
-    </div>
+    <main>
+        <section id="home">
+            <h2>الصفحة الرئيسية</h2>
+            <p>مرحبًا بكم في موقعنا!</p>
+        </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="app.js"></script>
+        <section id="players">
+            <h2>اللاعبون</h2>
+            <!-- لوحة التحكم لللاعبون -->
+        </section>
+
+        <section id="clubs">
+            <h2>الفرق</h2>
+            <!-- لوحة التحكم للفرق -->
+        </section>
+
+        <section id="leagues">
+            <h2>الлигиات</h2>
+            <!-- لوحة التحكم للлигиات -->
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 موقع الكرة القدم</p>
+    </footer>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
