@@ -1,28 +1,317 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة اللاعبين</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>تحدي كرة قدم - خمن اللاعب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- تضمين مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+    <style>
+        * { box-sizing: border-box; font-family: 'Tajawal', Arial, sans-serif; }
+        body { margin: 0; padding: 0; background-color: #f0f2f5; background-image: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%); direction: rtl; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background-color: #1e3a8a; background-image: linear-gradient(to right, #1e3a8a, #3b82f6); color: white; padding: 20px 0; text-align: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-bottom: 3px solid #facc15; }
+        h1 { margin: 0; font-size: 2.2rem; font-weight: 700; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); }
+        .login-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-image: url('/api/placeholder/1200/800'); background-size: cover; background-position: center; position: relative; }
+        .login-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.6); z-index: 1; }
+        .login-form { background-color: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); width: 380px; text-align: center; position: relative; z-index: 2; }
+        .login-form h2 { color: #1e3a8a; margin-bottom: 25px; font-size: 1.8rem; }
+        .login-logo { width: 80px; height: 80px; margin: 0 auto 20px; background-color: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; }
+        .form-group { margin-bottom: 20px; text-align: right; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: #374151; }
+        input, select { width: 100%; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 16px; transition: all 0.3s; background-color: #f9fafb; }
+        input:focus, select:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 700; margin: 5px; transition: all 0.3s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .btn-primary { background-color: #3b82f6; color: white; }
+        .btn-primary:hover { background-color: #2563eb; transform: translateY(-2px); }
+        .btn-secondary { background-color: #4b5563; color: white; }
+        .btn-secondary:hover { background-color: #374151; transform: translateY(-2px); }
+        .btn-success { background-color: #10b981; color: white; }
+        .btn-success:hover { background-color: #059669; transform: translateY(-2px); }
+        .btn-danger { background-color: #ef4444; color: white; }
+        .btn-danger:hover { background-color: #dc2626; }
+        .btn-icon { display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .buttons-container { display: flex; justify-content: center; margin: 30px 0; flex-wrap: wrap; gap: 10px; }
+        .category-title { text-align: center; font-size: 1.8rem; font-weight: 700; color: #1e3a8a; margin-bottom: 20px; margin-top: 20px; position: relative; padding-bottom: 10px; }
+        .category-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 3px; background-color: #facc15; }
+        .players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .player-card { background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.3s; border: 1px solid #e5e7eb; }
+        .player-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .player-img-container { position: relative; height: 100px; overflow: hidden; }
+        .player-img { width: 30%; height: 30%; object-fit: contain; cursor: pointer; transition: transform 0.5s; }
+        .player-img:hover { transform: scale(1.05); }
+        .player-info { padding: 20px; }
+        .player-name { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #1e3a8a; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px; }
+        .player-details { display: flex; flex-direction: column; gap: 12px; }
+        .detail-item { display: flex; align-items: center; gap: 10px; }
+        .detail-label { font-weight: 500; color: #6b7280; min-width: 70px; }
+        .flag-img, .club-img { width: 28px; height: 28px; object-fit: contain; border-radius: auto; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; }
+        .clubs-container { display: flex; gap: 8px; flex-wrap: wrap; }
+        .club-wrapper { display: flex; align-items: center; background-color: #f3f4f6; padding: 5px 10px; border-radius: 20px; font-size: 14px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; animation: fadeIn 0.3s; }
+        .modal-content { max-width: 100%; max-height: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .modal-img { width: 100%; height: 100%; object-fit: contain; }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 35px; cursor: pointer; background-color: rgba(0, 0, 0, 0.5); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s; }
+        .close-modal:hover { background-color: rgba(239, 68, 68, 0.8); }
+        .admin-btn { display: none; }
+        .add-form { display: none; background-color: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); margin-top: 30px; border: 1px solid #e5e7eb; animation: slideDown 0.5s; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .add-form h3 { color: #1e3a8a; margin-top: 0; margin-bottom: 20px; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px; }
+        .form-row { display: flex; gap: 20px; margin-bottom: 20px; }
+        .form-col { flex: 1; }
+        .form-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .hidden { display: none; }
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltiptext { visibility: hidden; width: 120px; background-color: #333; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+        #notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #10b981; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); z-index: 1000; display: none; }
+        .user-info { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; }
+        .user-badge { background-color: #facc15; color: #1e3a8a; padding: 5px 10px; border-radius: 20px; font-size: 14px; font-weight: 700; }
+        @media (max-width: 768px) { .form-row { flex-direction: column; gap: 10px; } .buttons-container { flex-direction: column; align-items: center; } .btn { width: 100%; } .login-form { width: 90%; } }
+    </style>
 </head>
 <body>
+    <div id="notification"></div>
+    <div id="login-page" class="login-container">
+        <div class="login-form">
+            <div class="login-logo"><i class="fas fa-futbol"></i></div>
+            <h2>تحدي كرة قدم - خمن اللاعب</h2>
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> اسم المستخدم:</label>
+                <input type="text" id="username" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> كلمة المرور:</label>
+                <input type="password" id="password" placeholder="أدخل كلمة المرور">
+            </div>
+            <button class="btn btn-primary btn-icon" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>تسجيل الدخول</span>
+            </button>
+        </div>
+    </div>
+    <div id="main-page" class="hidden">
+        <header>
+            <div class="container">
+                <h1><i class="fas fa-futbol"></i> تحدي كرة قدم - خمن اللاعب</h1>
+                <div class="user-info" id="user-info"></div>
+                <button class="btn btn-secondary btn-icon" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>تسجيل الخروج</span>
+                </button>
+            </div>
+        </header>
+        <div class="container">
+            <div class="buttons-container">
+                <button class="btn btn-primary btn-icon" onclick="showPlayers('retired')">
+                    <i class="fas fa-history"></i>
+                    <span>لاعبين معتزلين</span>
+                </button>
+                <button class="btn btn-primary btn-icon" onclick="showPlayers('active')">
+                    <i class="fas fa-running"></i>
+                    <span>لاعبين حاليين</span>
+                </button>
+                <button class="btn btn-primary btn-icon" onclick="showPlayers('coaches')">
+                    <i class="fas fa-user-tie"></i>
+                    <span>مدربين</span>
+                </button>
+                <button id="add-btn" class="btn btn-success btn-icon admin-btn" onclick="showAddForm()">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>إضافة لاعب جديد</span>
+                </button>
+            </div>
+            <div id="add-form" class="add-form">
+                <h3>إضافة لاعب جديد</h3>
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="player-name">اسم اللاعب:</label>
+                            <input type="text" id="player-name">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="player-age">العمر:</label>
+                            <input type="number" id="player-age">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="player-nationality">الجنسية:</label>
+                            <input type="text" id="player-nationality">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="player-type">النوع:</label>
+                            <select id="player-type" class="form-control">
+                                <option value="retired">لاعب معتزل</option>
+                                <option value="active">لاعب حالي</option>
+                                <option value="coaches">مدرب</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="player-clubs">الأندية (مفصولة بفواصل):</label>
+                    <input type="text" id="player-clubs">
+                </div>
+                <div class="form-group">
+                    <label for="player-image">رابط الصورة:</label>
+                    <input type="text" id="player-image">
+                </div>
+                <div class="form-buttons">
+                    <button class="btn btn-primary" onclick="addPlayer()">إضافة</button>
+                    <button class="btn btn-secondary" onclick="hideAddForm()">إلغاء</button>
+                </div>
+            </div>
+            <div id="players-container" class="players-grid"></div>
+        </div>
+    </div>
+    <div id="image-modal" class="modal">
+        <span class="close-modal" onclick="closeModal()">×</span>
+        <div class="modal-content">
+            <img id="modal-img" class="modal-img" src="" alt="صورة اللاعب">
+        </div>
+    </div>
+    <script>
+        // تكوين Supabase
+        const SUPABASE_URL = "https://tkgfmecgejjqlwlupoea.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrZ2ZtZWNnZWpqcWx3bHVwb2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MDcwNzMsImV4cCI6MjA1NzQ4MzA3M30.YhYFwbrzJg_c68bp_j8LyvPeC6_AJWDPjvH7FQ-3Qqw";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <h1>إضافة لاعب جديد</h1>
-    <form id="player-form">
-        <input type="text" id="player-name" placeholder="اسم اللاعب" required>
-        <input type="number" id="player-age" placeholder="العمر" required>
-        <input type="number" id="player-height" placeholder="الطول بالمتر" step="0.01">
-        <input type="number" id="club-jersey-number" placeholder="رقم القميص في النادي">
-        <input type="number" id="national-jersey-number" placeholder="رقم القميص في المنتخب">
-        <input type="file" id="player-image" accept="image/*" required>
-        <button type="submit">إضافة اللاعب</button>
-    </form>
-
-    <h2>قائمة اللاعبين</h2>
-    <div id="players-list"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="script.js"></script>
+        // دوال تسجيل الدخول والخروج تظل كما هي
+        const users = [
+            { username: "admin", password: "admin", isAdmin: true },
+            { username: "user", password: "user", isAdmin: false }
+        ];
+        let currentUser = null;
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('main-page').classList.remove('hidden');
+                if (user.isAdmin) { document.getElementById('add-btn').style.display = 'inline-block'; }
+                document.getElementById('user-info').textContent = `مرحباً، ${username} ${user.isAdmin ? '(مدير)' : '(مستخدم)'}`;
+                showPlayers('retired');
+            } else { alert('اسم المستخدم أو كلمة المرور غير صحيحة!'); }
+        }
+        function logout() {
+            currentUser = null;
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+        // دالة جلب اللاعبين من Supabase بناءً على النوع
+        async function showPlayers(type) {
+            const container = document.getElementById('players-container');
+            container.innerHTML = '';
+            let { data: players, error } = await supabaseClient
+                .from('players')
+                .select('*')
+                .eq('type', type);
+            if (error) {
+                console.error('خطأ في جلب اللاعبين:', error.message);
+                return;
+            }
+            players.forEach(player => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                let clubsHTML = '';
+                if (player.clubs && Array.isArray(player.clubs)) {
+                    player.clubs.forEach(club => { 
+                        clubsHTML += `<img src="${club.img}" alt="${club.name}" title="${club.name}" class="club-img">`; 
+                    });
+                }
+                playerCard.innerHTML = `
+                    <img src="${player.player_image}" alt="${player.name}" class="player-img" onclick="openModal('${player.player_image}')">
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-details">
+                            <div class="detail-item">
+                                <span>العمر:</span>
+                                <span>${player.age}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>الجنسية:</span>
+                                <img src="${player.nationalityImg || '/api/placeholder/25/25'}" alt="${player.nationality || ''}" title="${player.nationality || ''}" class="flag-img">
+                                <span>${player.nationality || ''}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span>الأندية:</span>
+                                <div class="clubs-container">${clubsHTML}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(playerCard);
+            });
+        }
+        // دالة فتح وإغلاق النافذة المنبثقة للصور
+        function openModal(imageSrc) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            modal.style.display = 'flex';
+            modalImg.src = imageSrc;
+        }
+        function closeModal() {
+            document.getElementById('image-modal').style.display = 'none';
+        }
+        // إظهار وإخفاء نموذج إضافة لاعب
+        function showAddForm() { document.getElementById('add-form').style.display = 'block'; }
+        function hideAddForm() { document.getElementById('add-form').style.display = 'none'; }
+        // دالة إضافة لاعب جديد إلى Supabase دون تغيير باقي الواجهة
+        async function addPlayer() {
+            const name = document.getElementById('player-name').value;
+            const age = document.getElementById('player-age').value;
+            const nationality = document.getElementById('player-nationality').value;
+            const type = document.getElementById('player-type').value;
+            const clubsStr = document.getElementById('player-clubs').value;
+            const image = document.getElementById('player-image').value || "/api/placeholder/250/250";
+            if (!name || !age || !nationality || !clubsStr) {
+                alert('الرجاء إدخال جميع البيانات المطلوبة!');
+                return;
+            }
+            const clubsList = clubsStr.split(',').map(club => ({ name: club.trim(), img: "/api/placeholder/25/25" }));
+            const newPlayer = {
+                id: crypto.randomUUID(),
+                name,
+                age: parseInt(age),
+                nationality,
+                nationalityImg: "/api/placeholder/25/25",
+                type,
+                clubs: clubsList,
+                player_image: image
+            };
+            let { error } = await supabaseClient
+                .from('players')
+                .insert(newPlayer);
+            if (error) {
+                console.error('خطأ في إدخال اللاعب:', error.message);
+            } else {
+                console.log('تمت إضافة اللاعب بنجاح');
+                showPlayers(type);
+            }
+            // إعادة تعيين حقول الإدخال
+            document.getElementById('player-name').value = '';
+            document.getElementById('player-age').value = '';
+            document.getElementById('player-nationality').value = '';
+            document.getElementById('player-clubs').value = '';
+            document.getElementById('player-image').value = '';
+        }
+        window.onclick = function(event) {
+            const modal = document.getElementById('image-modal');
+            if (event.target === modal) { closeModal(); }
+        }
+    </script>
 </body>
 </html>
