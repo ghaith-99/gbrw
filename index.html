@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي كرة القدم - خمن اللاعب</title>
-    <link rel="stylesheet" href="styles.css"> <!-- رابط إلى ملف CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <title>إدارة اللاعبين</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>تحدي كرة القدم</h1>
-    <div id="players-container"></div>
-   
-    <form id="add-player-form">
+
+    <h1>إضافة لاعب جديد</h1>
+    <form id="player-form">
         <input type="text" id="player-name" placeholder="اسم اللاعب" required>
         <input type="number" id="player-age" placeholder="العمر" required>
-        <input type="text" id="player-nationality" placeholder="الجنسية" required>
-        <input type="text" id="player-clubs" placeholder="الأندية (مفصولة بفواصل)" required>
-        <input type="text" id="player-type" placeholder="النوع" required>
-        <input type="text" id="player-image" placeholder="رابط الصورة">
-        <button type="submit">إضافة لاعب</button>
+        <input type="number" id="player-height" placeholder="الطول بالمتر" step="0.01">
+        <input type="number" id="club-jersey-number" placeholder="رقم القميص في النادي">
+        <input type="number" id="national-jersey-number" placeholder="رقم القميص في المنتخب">
+        <input type="file" id="player-image" accept="image/*" required>
+        <button type="submit">إضافة اللاعب</button>
     </form>
 
-    <script src="script.js"></script> <!-- رابط إلى ملف JavaScript -->
+    <h2>قائمة اللاعبين</h2>
+    <div id="players-list"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
