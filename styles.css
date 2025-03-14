@@ -1,77 +1,40 @@
-/* تنسيق عام */
-* {
-    box-sizing: border-box;
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
 }
 
-body {
-    background-color: #f0f2f5;
-    padding: 20px;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* تنسيق النموذج */
-.form-section {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-.form-section h1 {
-    color: #1a73e8;
-    margin-bottom: 20px;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.upload-group {
-    margin: 15px 0;
-}
-
-button {
-    background: #1a73e8;
+header {
+    background-color: #007bff;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 10px 0;
+    text-align: center;
 }
 
-button:hover {
-    background: #1557b0;
+nav ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-/* تنسيق قائمة اللاعبين */
-.players-section {
-    background: white;
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.player-card {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-}
-
-.player-card img {
-    width: 100px;
-    border-radius: 5px;
-    margin-top: 10px;
+footer {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
